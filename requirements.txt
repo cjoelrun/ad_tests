@@ -1,4 +1,5 @@
 funkload
 yaml
 argh
+argcomplete
 python-novaclient
