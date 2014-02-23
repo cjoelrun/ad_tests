@@ -1,0 +1,9 @@
+* AD Tests
+
+** Installation
+
+#+BEGIN_SRC sh
+apt-get update; apt-get upgrade -y; apt-get install python-pip gnuplot -y;
+git clone https:/github.com/cjoelrun/ad_tests && cd ad_tests
+pip install -r requirements
+#+END_SRC
