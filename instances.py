@@ -19,9 +19,14 @@ class BootThread(threading.Thread):
     def run(self):
         with lock:
             print "{name} booting".format(name=self.name)
+        try:
+            ret = self.nova.servers.create(self.name, self.image_id,
+                                           self.flavor_id, nics=self.networks)
+        except Exception as e:
+            with lock:
+                print "{name} error:{err}".format(name=self.name, err=e)
+            return
 
-        ret = self.nova.servers.create(self.name, self.image_id,
-                                       self.flavor_id, nics=self.networks)
         server = self.wait_for_state(self.nova.servers.get, ret,
                                      "status", ["ACTIVE", "ERROR"])
         with lock:
