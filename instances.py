@@ -20,7 +20,7 @@ class BootThread(threading.Thread):
                                  self.flavor_id, nics=self.networks)
 
 def main(user, key, tenant, url, duration, interval, count, step=0):
-    nova = nova_client.Client(user, key, tenant, auth_url=url)
+    nova = nova_client.Client(user, key, tenant, auth_url=url, insecure=True)
     image_id = next(i for i in nova.images.list() if "cirros" in i.name)
     flavor_id = next(i for i in nova.flavors.list() if "tiny" in i.name)
     networks=[{"net-id": i.id} for i in nova.networks.list()]
