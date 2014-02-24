@@ -76,6 +76,6 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
 
     print "{0} cycles".format(cycles)
 
-    build(cycles, interval, count step)
+    build(cycles, interval, count, step)
 
 argh.dispatch_command(main)
