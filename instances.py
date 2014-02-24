@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import argh
+import time
 import threading
-from time import sleep
 from novaclient.v1_1 import client as nova_client
 
 lock = threading.RLock()
@@ -37,7 +37,7 @@ class BootThread(threading.Thread):
         attempt = 0
         in_attempt = lambda x: not attempts or attempts > x
         while getattr(obj, attr) not in desired and in_attempt(attempt):
-            sleep(interval)
+            time.sleep(interval)
             obj = fun(obj.id)
             attempt = attempt + 1
         return obj
@@ -60,7 +60,7 @@ def build(cycles, interval, count, step=0):
             thread.start()
             threads.append(thread)
         count = count + int(step)
-        sleep(int(interval))
+        time.sleep(int(interval))
 
     for thread in threads:
         thread.join(timeout=10)
