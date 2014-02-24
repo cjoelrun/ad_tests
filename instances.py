@@ -42,17 +42,17 @@ class BootThread(threading.Thread):
             attempt = attempt + 1
         return obj
 
-def main(user, key, tenant, url, duration, interval, count, step=0):
-    nova = nova_client.Client(user, key, tenant, auth_url=url, insecure=True)
-    image_id = next(i for i in nova.images.list() if "cirros" in i.name)
-    flavor_id = next(i for i in nova.flavors.list() if "tiny" in i.name)
-    networks=[{"net-id": i.id} for i in nova.networks.list()]
-    cycles = int(duration)/int(interval)
-    count = int(count)
-    threads = []
+def timing(f):
+    def wrap(*args):
+        time1 = time.time()
+        ret = f(*args)
+        time2 = time.time()
+        print '%s function took %0.3f ms' % (f.func_name, (time2-time1)*1000.0)
+        return ret
+    return wrap
 
-    print "{0} cycles".format(cycles)
-
+@timing
+def build(cycles, interval, count, step=0):
     for cycle in xrange(cycles):
         for tcount in xrange(count):
             name = "{cycle}-{count}".format(cycle=cycle, count=tcount)
@@ -64,5 +64,18 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
 
     for thread in threads:
         thread.join(timeout=10)
+
+def main(user, key, tenant, url, duration, interval, count, step=0):
+    nova = nova_client.Client(user, key, tenant, auth_url=url, insecure=True)
+    image_id = next(i for i in nova.images.list() if "cirros" in i.name)
+    flavor_id = next(i for i in nova.flavors.list() if "tiny" in i.name)
+    networks=[{"net-id": i.id} for i in nova.networks.list()]
+    cycles = int(duration)/int(interval)
+    count = int(count)
+    threads = []
+
+    print "{0} cycles".format(cycles)
+
+    build(cycles, interval, count step)
 
 argh.dispatch_command(main)
