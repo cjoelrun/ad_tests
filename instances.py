@@ -43,17 +43,18 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
     flavor_id = next(i for i in nova.flavors.list() if "tiny" in i.name)
     networks=[{"net-id": i.id} for i in nova.networks.list()]
     cycles = int(duration)/int(interval)
+    count = int(count)
     threads = []
 
     print "{0} cycles".format(cycles)
 
     for cycle in xrange(int(cycles)):
-        for count in xrange(int(count)):
+        for count in xrange(count):
             name = "{cycle}-{count}".format(cycle=cycle, count=count)
             thread = BootThread(nova, name, image_id, flavor_id, networks)
             thread.start()
             threads.append(thread)
-        count = int(count) + int(step)
+        count = count + int(step)
         sleep(int(interval))
 
     for thread in threads:
