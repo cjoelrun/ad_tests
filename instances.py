@@ -52,9 +52,10 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
         for count in xrange(count):
             print "{0}:{1}".format(cycle, count)
             name = "{cycle}-{count}".format(cycle=cycle, count=count)
-            thread = BootThread(nova, name, image_id, flavor_id, networks)
-            thread.start()
-            threads.append(thread)
+            # thread = BootThread(nova, name, image_id, flavor_id, networks)
+            # thread.start()
+            # threads.append(thread)
+        print "count:{0}".format(count)
         count = count + int(step)
         sleep(int(interval))
 
