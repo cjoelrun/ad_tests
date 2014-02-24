@@ -22,7 +22,7 @@ class BootThread(threading.Thread):
         server = self.wait_for_state(self.nova.servers.get, ret,
                                      "status", ["ACTIVE", "ERROR"])
         with lock:
-            print "{0}{1}".format(self.name, complete)
+            print "{name} complete".format(name=self.name)
 
     def wait_for_state(self, fun, obj, attr, desired, interval=1,
                        attempts=None):
