@@ -52,7 +52,7 @@ def timing(f):
     return wrap
 
 @timing
-def build(cycles, interval, count, step=0):
+def build(nova, cycles, interval, count, step):
     for cycle in xrange(cycles):
         for tcount in xrange(count):
             name = "{cycle}-{count}".format(cycle=cycle, count=tcount)
@@ -76,6 +76,6 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
 
     print "{0} cycles".format(cycles)
 
-    build(cycles, interval, count, step)
+    build(nova, cycles, interval, count, step)
 
 argh.dispatch_command(main)
