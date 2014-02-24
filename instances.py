@@ -22,8 +22,7 @@ class BootThread(threading.Thread):
         server = self.wait_for_state(self.compute_client.servers.get, server,
                                      "status", ["ACTIVE", "ERROR"])
         with lock:
-            print self.name complete
-
+            print "{0}{1}".format(self.name, complete)
 
     def wait_for_state(self, fun, obj, attr, desired, interval=1,
                        attempts=None):
