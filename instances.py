@@ -32,7 +32,7 @@ class BootThread(threading.Thread):
         with lock:
             print "{name} complete".format(name=self.name)
 
-    def wait_for_state(self, fun, obj, attr, desired, interval=1,
+    def wait_for_state(self, fun, obj, attr, desired, interval=.1,
                        attempts=None):
         attempt = 0
         in_attempt = lambda x: not attempts or attempts > x
