@@ -48,8 +48,9 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
 
     print "{0} cycles".format(cycles)
 
-    for cycle in xrange(int(cycles)):
+    for cycle in xrange(cycles):
         for count in xrange(count):
+            print "{0}:{1}".format(cycle, count)
             name = "{cycle}-{count}".format(cycle=cycle, count=count)
             thread = BootThread(nova, name, image_id, flavor_id, networks)
             thread.start()
