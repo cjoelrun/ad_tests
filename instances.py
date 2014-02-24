@@ -5,6 +5,7 @@ import threading
 from time import sleep
 from novaclient.v1_1 import client as nova_client
 
+lock = threading.RLock()
 
 class BootThread(threading.Thread):
     def __init__(self, nova, name, image_id, flavor_id, networks):
@@ -16,8 +17,23 @@ class BootThread(threading.Thread):
         self.networks = networks
 
     def run(self):
-        self.nova.servers.create(self.name, self.image_id,
-                                 self.flavor_id, nics=self.networks)
+        ret = self.nova.servers.create(self.name, self.image_id,
+                                       self.flavor_id, nics=self.networks)
+        server = self.wait_for_state(self.compute_client.servers.get, server,
+                                     "status", ["ACTIVE", "ERROR"])
+        with lock:
+            print self.name complete
+
+
+    def wait_for_state(self, fun, obj, attr, desired, interval=1,
+                       attempts=None):
+        attempt = 0
+        in_attempt = lambda x: not attempts or attempts > x
+        while getattr(obj, attr) not in desired and in_attempt(attempt):
+            sleep(interval)
+            obj = fun(obj.id)
+            attempt = attempt + 1
+        return obj
 
 def main(user, key, tenant, url, duration, interval, count, step=0):
     nova = nova_client.Client(user, key, tenant, auth_url=url, insecure=True)
