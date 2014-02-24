@@ -53,6 +53,7 @@ def timing(f):
 
 @timing
 def build(nova, cycles, interval, count, step, image_id, flavor_id, networks):
+    threads = []
     for cycle in xrange(cycles):
         for tcount in xrange(count):
             name = "{cycle}-{count}".format(cycle=cycle, count=tcount)
@@ -72,7 +73,6 @@ def main(user, key, tenant, url, duration, interval, count, step=0):
     networks=[{"net-id": i.id} for i in nova.networks.list()]
     cycles = int(duration)/int(interval)
     count = int(count)
-    threads = []
 
     print "{0} cycles".format(cycles)
 
