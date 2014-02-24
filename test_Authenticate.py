@@ -18,8 +18,10 @@ class Authenticate(FunkLoadTestCase):
     def test_authenticate(self):
         server_url = self.server_url
         creds = self.users[randint(0, len(self.users)-1)]
-        user, password = creds.split(':')
-        data = '{{"auth":{{"passwordCredentials": {{"username": "{user}", "password": "{password}"}}, "tenantName": "admin"}}}}'.format(user=user, password=password)
+        user, password, tenant = creds.split(':')
+        data = '{{"auth":{{"passwordCredentials": {{"username": "{user}", "password": "{password}"}}, "tenantName": "{tenant}"}}}}'.format(user=user,
+                                                                                                                                           password=password,
+                                                                                                                                           tenant=tenant)
         ret = self.post(self.server_url + "/v2.0/tokens", params=Data('application/json', data), description="Authenticate with user")
         self.assert_(ret.code in [200, 203], "expecting 200 or 203")
 
